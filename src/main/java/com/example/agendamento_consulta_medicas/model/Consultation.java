@@ -2,6 +2,7 @@ package com.example.agendamento_consulta_medicas.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,6 +29,7 @@ public class Consultation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long consultationId;
 
+    @Column(nullable = false)
     private LocalDateTime consultationDateTime;
 
     @Enumerated(EnumType.STRING)

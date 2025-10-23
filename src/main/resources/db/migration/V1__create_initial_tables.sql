@@ -1,0 +1,56 @@
+CREATE TABLE TB_USERS(
+    user_id BIGSERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    active BOOLEAN NOT NULL
+);
+
+CREATE TABLE TB_ROLES(
+    role_id BIGSERIAL PRIMARY KEY,
+    role_name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE user_roles(
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY(user_id, role_id),
+    FOREIGN KEY(user_id) REFERENCES TB_USERS(user_id),
+    FOREIGN KEY(role_id) REFERENCES TB_ROLES(role_id)
+
+);
+
+CREATE TABLE TB_PATIENTS(
+    user_id BIGINT NOT NULL,
+    cpf VARCHAR(255) NOT NULL UNIQUE,
+    telephone VARCHAR(255) NOT NULL UNIQUE,
+    FOREIGN KEY(user_id) REFERENCES TB_USERS(user_id)
+);
+
+CREATE TABLE TB_MEDICS(
+    user_id BIGINT NOT NULL,
+    crm VARCHAR(255) NOT NULL UNIQUE,
+    speciality VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES TB_USERS(user_id)
+);
+
+CREATE TABLE TB_DISPONIBILITIES(
+    disponibility_id BIGSERIAL NOT NULL PRIMARY KEY,
+    initial_date_hour TIMESTAMP NOT NULL, 
+    final_date_hour TIMESTAMP NOT NULL,
+    medic_id BIGINT NOT NULL,
+    FOREIGN KEY(medic_id) REFERENCES TB_MEDICS(user_id)
+);
+
+CREATE TABLE TB_CONSULTATIONS(
+    consultation_id BIGSERIAL NOT NULL PRIMARY KEY,
+    consultation_date_time TIMESTAMP NOT NULL,
+    status VARCHAR(255) NOT NULL,
+    medic_id BIGINT NOT NULL,
+    patient_id BIGINT NOT NULL,
+    FOREIGN KEY(medic_id) REFERENCES TB_MEDICS(user_id)
+    FOREIGN KEY(patient_id) REFERENCES TB_PATIENTS(user_id)    
+);
+
+INSERT INTO TB_ROLES (role_name) VALUES ('ROLE_ADMIN');
+INSERT INTO TB_ROLES (role_name) VALUES ('ROLE_MEDIC');
+INSERT INTO TB_ROLES (role_name) VALUES ('ROLE_PATIENT');
